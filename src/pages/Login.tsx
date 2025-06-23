@@ -1,29 +1,33 @@
 import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { Box, Card, CardContent, Typography, TextField, Button, InputAdornment, IconButton, Avatar, Stack } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Box, Card, CardContent, Typography, Button, InputAdornment, IconButton, Avatar, Stack } from '@mui/material';
 import { useNavigate } from 'react-router';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import RHFTextField from '../components/RHFTextField';
+import { loginSchema, LoginFormInputs } from './login.schema';
+import {  toast } from 'react-hot-toast';
+import './toast-antd.css';
 
 const mockUser = { username: 'admin', password: 'admin' };
 
-type LoginFormInputs = {
-  username: string;
-  password: string;
-};
-
 const Login: React.FC = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+  const { control, handleSubmit,} = useForm<LoginFormInputs>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { username: '', password: '' },
+  });
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = React.useState(false);
 
   const onSubmit = (data: LoginFormInputs) => {
     if (data.username === mockUser.username && data.password === mockUser.password) {
       localStorage.setItem('mock-auth', 'true');
-      navigate('/');
+      toast.success('Login successful!', { style: { fontSize: 14, minHeight: 32, borderRadius: 4, padding: '8px 16px' } });
+      setTimeout(() => navigate('/'), 1200);
     } else {
-      alert('Invalid credentials');
+      toast.error('Invalid credentials', { style: { fontSize: 14, minHeight: 32, borderRadius: 4, padding: '8px 16px' } });
     }
   };
 
@@ -95,45 +99,39 @@ const Login: React.FC = () => {
             </Typography>
           </Stack>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Controller
+            <RHFTextField
               name="username"
               control={control}
-              defaultValue=""
-              rules={{ required: 'Username required' }}
-              render={({ field }) => (
-                <TextField {...field} label="Username" fullWidth error={!!errors.username} helperText={errors.username?.message} sx={{ mb: 2 }} autoFocus />
-              )}
+              label="Username"
+              fullWidth
+              sx={{ mb: 2 }}
+              autoFocus
+              
             />
-            <Controller
+            <RHFTextField
               name="password"
               control={control}
-              defaultValue=""
-              rules={{ required: 'Password required' }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Password"
-                  type={showPassword ? 'text' : 'password'}
-                  fullWidth
-                  error={!!errors.password}
-                  helperText={errors.password?.message}
-                  sx={{ mb: 2 }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={() => setShowPassword((show) => !show)}
-                          edge="end"
-                          size="small"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              )}
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              fullWidth
+              sx={{ mb: 2 }}
+              
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword((show) => !show)}
+                        edge="end"
+                        size="small"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
             <Button type="submit" variant="contained" fullWidth size="large" sx={{ mt: 1, fontWeight: 700, borderRadius: 2, boxShadow: 'none' }}>
               Login
@@ -141,6 +139,7 @@ const Login: React.FC = () => {
           </form>
         </CardContent>
       </Card>
+      
     </Box>
   );
 };

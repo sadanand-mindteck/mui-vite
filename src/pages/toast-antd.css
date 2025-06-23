@@ -1,0 +1,45 @@
+.Toastify__toast {
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+  padding: 6px 12px !important;
+  font-size: 13px !important;
+  min-height: 32px !important;
+  line-height: 1.5 !important;
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif !important;
+  background: #fff !important;
+  color: #333 !important;
+  border: 1px solid #e6e6e6 !important;
+  margin: 8px 0 !important;
+}
+.Toastify__toast--success {
+  border-left: 3px solid #52c41a !important;
+  background: #f6ffed !important;
+  color: #389e0d !important;
+}
+.Toastify__toast--error {
+  border-left: 3px solid #ff4d4f !important;
+  background: #fff2f0 !important;
+  color: #a8071a !important;
+}
+.Toastify__toast--info {
+  border-left: 3px solid #1890ff !important;
+  background: #e6f7ff !important;
+  color: #0958d9 !important;
+}
+.Toastify__toast--warning {
+  border-left: 3px solid #faad14 !important;
+  background: #fffbe6 !important;
+  color: #ad6800 !important;
+}
+.Toastify__close-button {
+  color: #bfbfbf !important;
+  opacity: 1 !important;
+  font-size: 14px !important;
+  top: 4px !important;
+  right: 4px !important;
+}
+.Toastify__progress-bar {
+  background: #1890ff !important;
+  height: 2px !important;
+  border-radius: 1px !important;
+}
